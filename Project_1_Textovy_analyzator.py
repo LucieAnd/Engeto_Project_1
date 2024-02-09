@@ -51,7 +51,6 @@ print(line)
 
 if username in registered:
     registered_password = registered[username]
-
     if password == registered_password:
         print("Welcome, " + username.capitalize() + ", good to see you. Let's analyze some texts.")
         print(line)
@@ -62,7 +61,6 @@ if username in registered:
         print(line)
 
 # if statement
-
         if choose_text == "1" or choose_text == "2" or choose_text == "3":
             text_number = int(choose_text)
             index = text_number - 1
