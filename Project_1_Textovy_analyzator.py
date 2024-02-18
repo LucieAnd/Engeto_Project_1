@@ -49,92 +49,84 @@ username = input("Username: ")
 password = input("Password: ")
 print(line)
 
-if username in registered:
-    registered_password = registered[username]
-    if password == registered_password:
-        print("Welcome, " + username.capitalize() + ", good to see you. Let's analyze some texts.")
-        print(line)
+registered_password = registered.get(username)
 
-# choosing text
-        choose_text = input(
-            "You can choose one of three texts we've prepared. Enter number between 1 and 3 to select: ")
-        print(line)
-
-# if statement
-        if choose_text == "1" or choose_text == "2" or choose_text == "3":
-            text_number = int(choose_text)
-            index = text_number - 1
-
-# display text and headline
-            text_number = int(choose_text)
-            print("You have selected this text: ")
-            print(TEXTS[index])
-            print(line)
-            print("STATISTICS:")
-
-# how many words
-            split_text = TEXTS[index].split()
-            count_words = len(split_text)
-            print(f"There are {count_words} in the selected text.")
-
-# how many titlecase words
-            count_titlecase = 0
-            for titlecase in split_text:
-                if titlecase.istitle():
-                    count_titlecase += 1
-            print(f"There are {count_titlecase} titlecase words.")
-
-# how many uppercase words
-            count_uppercase = 0
-            for uppercase in split_text:
-                if uppercase.isupper() and uppercase.isalpha():
-                    count_uppercase += 1
-            print(f"There are {count_uppercase} uppercase words.")
-
-# how many lowercase words
-            count_lowercase = 0
-            for lowercase in split_text:
-                if lowercase.islower():
-                    count_lowercase += 1
-            print(f"There are {count_lowercase} lowercase words.")
-
-# how many numbers
-            count_numeric = 0
-            for numeric in split_text:
-                if numeric.isnumeric():
-                    count_numeric += 1
-            print(f"There are {count_numeric} numeric strings.")
-
-# sum of numbers
-            sum_numeric = list()
-            for numbers in split_text:
-                if str(numbers).isdigit():
-                    sum_numeric.append(int(numbers))
-            total = sum(sum_numeric)
-            print(f"The sum of all the numbers is {total}.")
-            print(line)
-            print("LEN|    OCCURRENCES    | NR.")
-            print(line)
-
-# bar graf
-            length_count = dict()
-            characters_to_remove = ",."
-            list_without_special_characters = [s.translate(str.maketrans("", "", characters_to_remove)) for s in
-                                               split_text]
-            for words in list_without_special_characters:
-                length = len(words)
-                if length in length_count:
-                    length_count[length] += 1
-                else:
-                    length_count[length] = 1
-            sorted_keys = sorted(length_count.keys())
-            for key in sorted_keys:
-                print(f"{key:2} | {'*' * length_count[key]:17} | {length_count[key]}")
-            print(line)
-
-        else:
-            print("Not a valid option, terminating the program, bye.")
-    else:
-        print("Unregistered user. Terminating the program. Goodbye.")
+if registered_password is not None and password == registered_password:
+    print(f"Welcome, {username.capitalize()}, good to see you. Let's analyze some texts.")
+    print(line)
 else:
     print("Unregistered user. Terminating the program. Goodbye.")
+    exit()
+
+# choosing text
+choose_text = input(
+    "You can choose one of three texts we've prepared. Enter number between 1 and 3 to select: ")
+print(line)
+
+# if statement
+if choose_text.isdigit() and 1 <= int(choose_text) <= len(TEXTS):
+    index = int(choose_text) - 1
+    selected_text = TEXTS[index]
+    print(f"You have selected: {selected_text}")
+
+# display text and headline
+    print("You have selected this text: ")
+    print(selected_text)
+    print(line)
+    print("STATISTICS:")
+
+# how many words
+    split_text = selected_text.split()
+    count_words = len(split_text)
+    print(f"There are {count_words} in the selected text.")
+
+# how many titlecase, uppercase, lowercase words
+    count_titlecase = 0
+    count_uppercase = 0
+    count_lowercase = 0
+    for word in split_text:
+        if word.istitle():
+            count_lowercase = 0
+        if word.isupper() and word.isalpha():
+            count_uppercase += 1
+        if word.islower():
+            count_lowercase += 1
+    print(f"There are {count_titlecase} titlecase words.")
+    print(f"There are {count_uppercase} uppercase words.")
+    print(f"There are {count_lowercase} lowercase words.")
+
+# how many numbers
+    count_numeric = 0
+    for numeric in split_text:
+        if numeric.isnumeric():
+            count_numeric += 1
+    print(f"There are {count_numeric} numeric strings.")
+
+# sum of numbers
+    sum_numeric = list()
+    for numbers in split_text:
+        if str(numbers).isdigit():
+            sum_numeric.append(int(numbers))
+    total = sum(sum_numeric)
+    print(f"The sum of all the numbers is {total}.")
+    print(line)
+    print("LEN|    OCCURRENCES    | NR.")
+    print(line)
+
+# bar graf
+    length_count = dict()
+    characters_to_remove = ",."
+    list_without_special_characters = [s.replace(",", "").replace(".", "") for s in split_text]
+    for words in list_without_special_characters:
+        length = len(words)
+        if length in length_count:
+            length_count[length] += 1
+        else:
+            length_count[length] = 1
+    sorted_keys = sorted(length_count.keys())
+    for key in sorted_keys:
+        print(f"{key:2} | {'*' * length_count[key]:17} | {length_count[key]}")
+    print(line)
+
+else:
+    print("Not a valid option, terminating the program, bye.")
