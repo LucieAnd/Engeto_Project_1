@@ -63,15 +63,11 @@ choose_text = input(
     "You can choose one of three texts we've prepared. Enter number between 1 and 3 to select: ")
 print(line)
 
-# if statement
+# selected text
 if choose_text.isdigit() and 1 <= int(choose_text) <= len(TEXTS):
     index = int(choose_text) - 1
     selected_text = TEXTS[index]
     print(f"You have selected: {selected_text}")
-
-# display text and headline
-    print("You have selected this text: ")
-    print(selected_text)
     print(line)
     print("STATISTICS:")
 
@@ -80,34 +76,27 @@ if choose_text.isdigit() and 1 <= int(choose_text) <= len(TEXTS):
     count_words = len(split_text)
     print(f"There are {count_words} in the selected text.")
 
-# how many titlecase, uppercase, lowercase words
+# how many titlecase, uppercase, lowercase words, numbers, sum
     count_titlecase = 0
     count_uppercase = 0
     count_lowercase = 0
+    count_numeric = 0
+    numbers = []
     for word in split_text:
         if word.istitle():
-            count_lowercase = 0
-        if word.isupper() and word.isalpha():
+            count_titlecase += 1
+        elif word.isupper():
             count_uppercase += 1
-        if word.islower():
+        elif word.islower():
             count_lowercase += 1
+        elif word.isnumeric():
+            count_numeric += 1
+            numbers.append(int(word))
+    total = sum(numbers)
     print(f"There are {count_titlecase} titlecase words.")
     print(f"There are {count_uppercase} uppercase words.")
     print(f"There are {count_lowercase} lowercase words.")
-
-# how many numbers
-    count_numeric = 0
-    for numeric in split_text:
-        if numeric.isnumeric():
-            count_numeric += 1
     print(f"There are {count_numeric} numeric strings.")
-
-# sum of numbers
-    sum_numeric = list()
-    for numbers in split_text:
-        if str(numbers).isdigit():
-            sum_numeric.append(int(numbers))
-    total = sum(sum_numeric)
     print(f"The sum of all the numbers is {total}.")
     print(line)
     print("LEN|    OCCURRENCES    | NR.")
